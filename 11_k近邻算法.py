@@ -1,6 +1,6 @@
 from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler
 
 def knncls():
@@ -54,17 +54,27 @@ def knncls():
     x_test = std.transform(x_test)
 
     # 进行算法流程
-    knn = KNeighborsClassifier(n_neighbors=5)
+    knn = KNeighborsClassifier()
 
+    # 进行网格搜索
+    gc = GridSearchCV(knn,param_grid={"n_neighbors":[1,3,5]}, cv=10)
+
+    gc.fit(x_train, y_train)
+
+    # 预测准确率
+    print("在测试集上准确率:",gc.score(x_test, y_test))
+    print("在交叉验证当中最好的结果:", gc.best_score_)
+    print("选择最好的模型是:", gc.best_estimator_)
+    print("每个超参数每次交叉验证的结果:", gc.cv_results_)
     # fit predict,score
-    knn.fit(x_train, y_train)
-
-    # 得出预测结果　
-    y_predict = knn.predict(x_test)
-    print("预测的目标签到位置为:", y_predict)
-
-    # 得出准确率
-    print("预测的准确率:", knn.score(x_test, y_test))
+    # knn.fit(x_train, y_train)
+    #
+    # # 得出预测结果　
+    # y_predict = knn.predict(x_test)
+    # print("预测的目标签到位置为:", y_predict)
+    #
+    # # 得出准确率
+    # print("预测的准确率:", knn.score(x_test, y_test))
 
 if __name__ == "__main__":
     knncls()
