@@ -3,6 +3,9 @@ from sklearn.linear_model import LinearRegression,SGDRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import Ridge
+# from sklearn.externals import joblib
+import joblib
 
 
 def mylinear():
@@ -33,26 +36,47 @@ def mylinear():
 
     lr.fit(x_train, y_train.ravel())
 
-    print(lr.coef_)
+    print(lr.coef_)  # 已经得到参数
+
+    # 保存训练好的模型
+    joblib.dump(lr, "./test.pkl")
 
     # 预测测试集的房子价格
     y_lr_predict = std_y.inverse_transform(lr.predict(x_test))
 
     print("测试集里面的每个房子的价格:", y_lr_predict)
     print("正规方程的均方误差:", mean_squared_error(std_y.inverse_transform(y_test), y_lr_predict))
-    # 梯度下降进行预测
-    sgd = SGDRegressor()
 
-    sgd.fit(x_train, y_train.ravel())
+    # # 梯度下降进行预测
+    # sgd = SGDRegressor()
+    #
+    # sgd.fit(x_train, y_train.ravel())
+    #
+    # print(sgd.coef_)
+    #
+    # # 预测测试集的房子价格
+    # y_sgd_predict = std_y.inverse_transform(sgd.predict(x_test))
+    #
+    # print("测试集里面的每个房子的价格:", y_sgd_predict)
+    # print("梯度下降的均方误差:", mean_squared_error(std_y.inverse_transform(y_test), y_sgd_predict))
+    #
+    # # 岭回归进行预测
+    # rd = Ridge(alpha=1.0)
+    #
+    # rd.fit(x_train, y_train.ravel())
+    # # 权重参数
+    # print(rd.coef_)
+    #
+    # # 预测测试集的房子价格
+    # y_rd_predict = std_y.inverse_transform(rd.predict(x_test))
+    #
+    # print("测试集里面的每个房子的价格:", y_rd_predict)
+    # print("岭回归的均方误差:", mean_squared_error(std_y.inverse_transform(y_test), y_rd_predict))
 
-    print(sgd.coef_)
 
-    # 预测测试集的房子价格
-    y_sgd_predict = std_y.inverse_transform(sgd.predict(x_test))
-
-    print("测试集里面的每个房子的价格:", y_sgd_predict)
-    print("梯度下降的均方误差:", mean_squared_error(std_y.inverse_transform(y_test), y_sgd_predict))
     return None
+
+
 
 if __name__ == "__main__":
     mylinear()
