@@ -2,12 +2,16 @@ from sklearn.datasets import load_boston
 from sklearn.linear_model import LinearRegression, SGDRegressor, LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error, classification_report
+from sklearn.metrics import mean_squared_error, classification_report,confusion_matrix
 from sklearn.linear_model import Ridge
 import joblib
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
+from plot_混淆矩阵 import plot_confusion_matrix,plt
+
+
+
 
 def logistic():
     """
@@ -44,6 +48,14 @@ def logistic():
     lg.fit(x_train, y_train)
 
     y_predict = lg.predict(x_test)
+
+    # 绘图
+    cnf_matrix = confusion_matrix(y_test, y_predict)
+    class_names = ["Good", "Bad"]
+    plt.figure()
+    plot_confusion_matrix(cnf_matrix, classes=class_names, normalize=True,
+                          title='Normalized confusion matrix')
+
 
     print("权重参数:", lg.coef_)
 
